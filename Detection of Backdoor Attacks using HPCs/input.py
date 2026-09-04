@@ -9,8 +9,7 @@ df = pd.read_csv("trace.csv")
 
 # print(df.describe())
 
-# print(df.isnull().sum())
-
+print(df.isnull().sum())
 
 # what does normla look alike ?
 # print(df.corr()) # correlation
@@ -23,7 +22,6 @@ df = pd.read_csv("trace.csv")
 
 
 # lets look at covariance also
-
 
 print(df.cov())
 
