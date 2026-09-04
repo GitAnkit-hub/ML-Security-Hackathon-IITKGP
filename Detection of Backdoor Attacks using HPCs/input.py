@@ -10,3 +10,4 @@ print(df.head())
 print(df.describe())
 
 print(df.isnull().sum())
+
