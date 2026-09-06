@@ -92,8 +92,8 @@ y = df["LLC-loads"].values
 
 a, b = np.polyfit(x, y, 1)
 
-print("slope =", a)
-print("intercept =", b)
+# print("slope =", a)
+# print("intercept =", b)
 
 predicted = a * x + b
 residual = y - predicted
@@ -104,4 +104,49 @@ residual = y - predicted
 
 
 
+
+#09 moving towards mahalanbois distance
+# taking the shape of the clean distribution into account:
+cov = np.cov(X_scaled, rowvar = False)
+
+cov_inv = np.linalg.inv(cov)
+
+# print("Covariance matrix:")
+# print(cov)
+
+# print("\nInverse covariance matrix:")
+# print(cov_inv)
+p = X_scaled[0]
+diff = p - X_scaled.mean(axis = 0)
+
+d_squared = diff.T @ cov_inv @ diff
+
+d = np.sqrt(d_squared)
+
+# print("p =", p)
+# print("diff =", diff)
+# print("Mahalanbois distance =", d)
+
+
+
+
+# calculate for 800 Mahalanbois distances
+
+diff = X_scaled - X_scaled.mean(axis = 0)
+mahalanbois_squared = np.einsum(
+    'ij, jk, ik -> i',
+    diff,
+    cov_inv,
+    diff
+)
+
+mahalanbois_distance = np.sqrt(mahalanbois_squared)
+
+print(np.percentile(
+    mahalanbois_distance,
+    [50, 75, 90, 95, 99, 99.5, 100]
+))
+
+print("min:", mahalanbois_distance.min())
+print("max:", mahalanbois_distance.max())
 
