@@ -142,11 +142,62 @@ mahalanbois_squared = np.einsum(
 
 mahalanbois_distance = np.sqrt(mahalanbois_squared)
 
-print(np.percentile(
-    mahalanbois_distance,
-    [50, 75, 90, 95, 99, 99.5, 100]
-))
+# print(np.percentile(
+#     mahalanbois_distance,
+#     [50, 75, 90, 95, 99, 99.5, 100]
+# ))
 
-print("min:", mahalanbois_distance.min())
-print("max:", mahalanbois_distance.max())
+# print("min:", mahalanbois_distance.min())
+# print("max:", mahalanbois_distance.max())
+
+
+
+# 10 Going towards generalization of ML
+#training on 600 points
+# testing on 200 points
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_val = train_test_split(
+    X_scaled,
+    test_size = 0.25,
+    train_size = 0.75,
+)
+
+#learn normal behaviour only from the 600 trainign samples
+
+mu = X_train.mean(axis = 0)
+cov = np.cov(X_train, rowvar = False)
+cov_inv = np.linalg.inv(cov)
+
+
+# Score training samples
+diff_train = X_train - mu
+
+d2_train = np.einsum(
+    'ij,jk,ik->i',
+    diff_train,
+    cov_inv,
+    diff_train
+)
+
+score_train = np.sqrt(d2_train)
+
+# Score unseen clean samples
+diff_val = X_val - mu
+
+d2_val = np.einsum(
+    'ij,jk,ik->i',
+    diff_val,
+    cov_inv,
+    diff_val
+)
+
+score_val = np.sqrt(d2_val)
+
+print("TRAIN")
+print(np.percentile(score_train, [50, 75, 90, 95, 99, 100]))
+
+print("\nVALIDATION (unseen clean)")
+print(np.percentile(score_val, [50, 75, 90, 95, 99, 100]))
 
