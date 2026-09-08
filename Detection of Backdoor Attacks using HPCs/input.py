@@ -195,9 +195,17 @@ d2_val = np.einsum(
 
 score_val = np.sqrt(d2_val)
 
-print("TRAIN")
-print(np.percentile(score_train, [50, 75, 90, 95, 99, 100]))
+# print("TRAIN")
+# print(np.percentile(score_train, [50, 75, 90, 95, 99, 100]))
 
-print("\nVALIDATION (unseen clean)")
-print(np.percentile(score_val, [50, 75, 90, 95, 99, 100]))
+# print("\nVALIDATION (unseen clean)")
+# print(np.percentile(score_val, [50, 75, 90, 95, 99, 100]))
 
+
+
+# Which traces received the highest Mahalanobis scores?
+
+idx = np.argsort(mahalanbois_distance)[-10:][::-1]
+
+print(df.iloc[idx])
+print(mahalanbois_distance[idx])
