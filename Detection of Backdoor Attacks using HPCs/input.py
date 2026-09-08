@@ -140,15 +140,15 @@ mahalanbois_squared = np.einsum(
     diff
 )
 
-mahalanbois_distance = np.sqrt(mahalanbois_squared)
+mahalanobis_distance = np.sqrt(mahalanbois_squared)
 
 # print(np.percentile(
-#     mahalanbois_distance,
+#     mahalanobis_distance,
 #     [50, 75, 90, 95, 99, 99.5, 100]
 # ))
 
-# print("min:", mahalanbois_distance.min())
-# print("max:", mahalanbois_distance.max())
+# print("min:", mahalanobis_distance.min())
+# print("max:", mahalanobis_distance.max())
 
 
 
@@ -205,7 +205,17 @@ score_val = np.sqrt(d2_val)
 
 # Which traces received the highest Mahalanobis scores?
 
-idx = np.argsort(mahalanbois_distance)[-10:][::-1]
+idx = np.argsort(mahalanobis_distance)[-10:][::-1]
+
+# print(df.iloc[idx])
+# print(mahalanobis_distance[idx])
+
+
+#11 Maximum absolute z-score
+z_score = np.max(np.abs(X_scaled), axis=1)
+
+idx = np.argsort(z_score)[-10:][::-1]
 
 print(df.iloc[idx])
-print(mahalanbois_distance[idx])
+print(z_score[idx])
+print(mahalanobis_distance[idx])
